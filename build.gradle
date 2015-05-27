@@ -1,0 +1,33 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+version = '1.0'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.eclipse.jetty:jetty-server:9.3.0.M2'
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    compile 'org.eclipse.jetty:jetty-server:9.3.0.M2'
+    compile 'org.slf4j:slf4j-simple:1.7.12'
+    compile 'org.projectlombok:lombok:1.16.4'
+    testCompile 'junit:junit:4.12'
+}
+
+task run(type: JavaExec) {
+    main = 'me.geso.example.Httpd'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task fatJar(type: Jar) {
+  manifest {
+        attributes 'Implementation-Title': 'jetty with srever-starter sample',  
+          'Implementation-Version': version,
+          'Main-Class': 'me.geso.example.Httpd'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
