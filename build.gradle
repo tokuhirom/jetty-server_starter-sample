@@ -16,13 +16,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-task run(type: JavaExec) {
-    main = 'me.geso.example.Httpd'
-    classpath = sourceSets.main.runtimeClasspath
-}
+def port=18081
 
 task fatJar(type: Jar) {
-  manifest {
+    manifest {
         attributes 'Implementation-Title': 'jetty with srever-starter sample',  
           'Implementation-Version': version,
           'Main-Class': 'me.geso.example.Httpd'
@@ -30,4 +27,10 @@ task fatJar(type: Jar) {
     baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
+}
+
+
+task run(type: Exec, dependsOn: fatJar) {
+    commandLine 'start_server', "--port=${port}=0", '--', \
+        'java', '-jar', "build/libs/jetty-server_starter-sample-all-${version}.jar";
 }
