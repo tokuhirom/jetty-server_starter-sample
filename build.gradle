@@ -34,3 +34,5 @@ task run(type: Exec, dependsOn: fatJar) {
     commandLine 'start_server', "--port=${port}=0", '--', \
         'java', '-jar', "build/libs/jetty-server_starter-sample-all-${version}.jar";
 }
+
+defaultTasks 'fatJar'
