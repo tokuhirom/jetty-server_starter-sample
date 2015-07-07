@@ -17,6 +17,8 @@ public class Httpd {
 		connector.setInheritChannel(true);
 		connector.setPort(port);
 		server.setConnectors(new Connector[]{connector});
+		server.setStopAtShutdown(true);
+		server.setStopTimeout(7_000);
 
 		HandlerCollection handlers = new HandlerCollection();
 		server.setHandler(handlers);
