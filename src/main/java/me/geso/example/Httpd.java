@@ -13,7 +13,7 @@ import org.eclipse.jetty.server.ServerConnector;
 
 public class Httpd {
 	public static void main(String[] args) throws Exception {
-		int port = 18080;
+		int port = Integer.valueOf(System.getProperty("jetty.port", "18080"));
 		Server server = new Server();
 
 		// server.addEventListener(new MyListener());
@@ -28,13 +28,15 @@ public class Httpd {
 		server.setHandler(handlers);
 
 		// enable access log
-		Slf4jRequestLog requestLog = new Slf4jRequestLog();
-		requestLog.setExtended(true);
-		requestLog.setLogCookies(false);
-		requestLog.setLogTimeZone("GMT");
-		RequestLogHandler requestLogHandler = new RequestLogHandler();
-		requestLogHandler.setRequestLog(requestLog);
-		handlers.addHandler(requestLogHandler);
+		if (Boolean.valueOf(System.getProperty("jetty.accessLog", "false"))) {
+			Slf4jRequestLog requestLog = new Slf4jRequestLog();
+			requestLog.setExtended(true);
+			requestLog.setLogCookies(false);
+			requestLog.setLogTimeZone("GMT");
+			RequestLogHandler requestLogHandler = new RequestLogHandler();
+			requestLogHandler.setRequestLog(requestLog);
+			handlers.addHandler(requestLogHandler);
+		}
 
 		// StatisticsHandler is required for 'setStopTimeout' method.
 		StatisticsHandler statisticsHandler = new StatisticsHandler();
