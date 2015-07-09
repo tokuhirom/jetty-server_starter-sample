@@ -41,13 +41,6 @@ public class Httpd {
 		server.setStopTimeout(7_000);
 
 		HandlerCollection handlers = new HandlerCollection();
-		server.setHandler(handlers);
-
-		// set servlet
-		ServletHolder servletHolder = new ServletHolder(HelloServlet.class);
-		ServletContextHandler context = new ServletContextHandler(server, "/");
-		context.addServlet(servletHolder, "/*");
-		handlers.addHandler(context);
 
 		// enable access log
 		if (Boolean.valueOf(System.getProperty("jetty.accessLog", "false"))) {
@@ -60,9 +53,18 @@ public class Httpd {
 			handlers.addHandler(requestLogHandler);
 		}
 
+
+		// set servlet
+		ServletHolder servletHolder = new ServletHolder(HelloServlet.class);
+		ServletContextHandler context = new ServletContextHandler(server, "/");
+		context.addServlet(servletHolder, "/*");
+		handlers.addHandler(context);
+
 		// StatisticsHandler is required for 'setStopTimeout' method.
 		StatisticsHandler statisticsHandler = new StatisticsHandler();
-		handlers.addHandler(statisticsHandler);
+		statisticsHandler.setHandler(handlers);
+
+		server.setHandler(statisticsHandler);
 
 		// enable jmx
 		MBeanContainer mbContainer = new MBeanContainer(ManagementFactory.getPlatformMBeanServer());
