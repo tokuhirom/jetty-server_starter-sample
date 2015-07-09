@@ -1,5 +1,12 @@
 package me.geso.example;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+
+import java.io.IOException;
+
 import java.lang.management.ManagementFactory;
 
 import org.eclipse.jetty.jmx.MBeanContainer;
@@ -10,6 +17,8 @@ import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
 public class Httpd {
 	public static void main(String[] args) throws Exception {
@@ -26,6 +35,12 @@ public class Httpd {
 
 		HandlerCollection handlers = new HandlerCollection();
 		server.setHandler(handlers);
+
+		// set servlet
+		ServletHolder servletHolder = new ServletHolder(HelloServlet.class);
+		ServletContextHandler context = new ServletContextHandler(server, "/");
+		context.addServlet(servletHolder, "/*");
+		handlers.addHandler(context);
 
 		// enable access log
 		if (Boolean.valueOf(System.getProperty("jetty.accessLog", "false"))) {
@@ -49,6 +64,14 @@ public class Httpd {
 
 		server.start();
 		server.join();
+	}
+
+	public static class HelloServlet extends HttpServlet {
+		public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+			response.setContentType("text/plain; charset=utf-8");
+			response.getWriter().println("Hello, world!");
+		}
 	}
 
 }
