@@ -1,5 +1,8 @@
 package me.geso.example;
 
+import java.lang.management.ManagementFactory;
+
+import org.eclipse.jetty.jmx.MBeanContainer;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.Slf4jRequestLog;
@@ -24,6 +27,7 @@ public class Httpd {
 		HandlerCollection handlers = new HandlerCollection();
 		server.setHandler(handlers);
 
+		// enable access log
 		Slf4jRequestLog requestLog = new Slf4jRequestLog();
 		requestLog.setExtended(true);
 		requestLog.setLogCookies(false);
@@ -35,6 +39,11 @@ public class Httpd {
 		// StatisticsHandler is required for 'setStopTimeout' method.
 		StatisticsHandler statisticsHandler = new StatisticsHandler();
 		handlers.addHandler(statisticsHandler);
+
+		// enable jmx
+		MBeanContainer mbContainer = new MBeanContainer(ManagementFactory.getPlatformMBeanServer());
+		server.addEventListener(mbContainer);
+		server.addBean(mbContainer);
 
 		server.start();
 		server.join();
