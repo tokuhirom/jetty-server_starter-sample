@@ -31,6 +31,9 @@
 
     start_server --port=3333=0 -- java -jar build/libs/jetty-server_starter-sample-all-1.0.jar
 
-## SEE ALSO
+## Supported Platforms
 
+This example works on linux.
+
+This example doesn't work on Mac.
 
