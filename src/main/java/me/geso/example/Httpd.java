@@ -5,6 +5,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.Slf4jRequestLog;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
+import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.server.ServerConnector;
 
 public class Httpd {
@@ -30,6 +31,10 @@ public class Httpd {
 		RequestLogHandler requestLogHandler = new RequestLogHandler();
 		requestLogHandler.setRequestLog(requestLog);
 		handlers.addHandler(requestLogHandler);
+
+		// StatisticsHandler is required for 'setStopTimeout' method.
+		StatisticsHandler statisticsHandler = new StatisticsHandler();
+		handlers.addHandler(statisticsHandler);
 
 		server.start();
 		server.join();
