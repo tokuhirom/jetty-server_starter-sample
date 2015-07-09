@@ -33,7 +33,7 @@ public class Httpd {
 		Server server = new Server();
 
 		// server.addEventListener(new MyListener());
-		ServerConnector connector = new ServerConnector(server);
+		ServerConnector connector = new ServerConnector(server, httpFactory);
 		connector.setInheritChannel(true);
 		connector.setPort(port);
 		server.setConnectors(new Connector[]{connector});
