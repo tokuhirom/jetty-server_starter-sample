@@ -20,10 +20,14 @@ dependencies {
 def port=18081
 
 task fatJar(type: Jar) {
+    def revision = 'git rev-parse HEAD'.execute().text.trim()
+    def date = new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
     manifest {
         attributes 'Implementation-Title': 'jetty with srever-starter sample',  
           'Implementation-Version': version,
-          'Main-Class': 'me.geso.example.Httpd'
+          'Main-Class': 'me.geso.example.Httpd',
+          "Date": date,
+          "Git-Revision": revision
     }
     baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
