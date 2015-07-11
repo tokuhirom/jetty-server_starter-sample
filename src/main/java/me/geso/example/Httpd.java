@@ -26,10 +26,10 @@ public class Httpd {
 	public static void main(String[] args) throws Exception {
 		HttpConfiguration httpConfig = new HttpConfiguration();
 		// do not send "Server" header
-		httpConfig.setSendServerVersion( false );
-		HttpConnectionFactory httpFactory = new HttpConnectionFactory( httpConfig );
+		httpConfig.setSendServerVersion(false);
+		HttpConnectionFactory httpFactory = new HttpConnectionFactory(httpConfig);
 
-		int port = Integer.valueOf(System.getProperty("jetty.port", "18080"));
+		int port = Integer.parseInt(System.getProperty("jetty.port", "18080"));
 		Server server = new Server();
 
 		// server.addEventListener(new MyListener());
